@@ -1,5 +1,16 @@
 # react-slick
 
+The purpose of this fork is to
+- slim down API surface,
+- reduce technical debt / complexity of the original project,
+- convert code to more recent ES2015/next style
+- rearchitect code to make it more unit-testable
+- use Travis && Code Coverage && semantic-release
+
+It doesn't support bower anymore, arrow / dots elements are not provided.
+
+**This is a work in progress and not really ready for general production use.**
+
 ### Installation
 ```bash
   npm install react-slick
@@ -32,6 +43,7 @@ var SimpleSlider = React.createClass({
   }
 });
 ```
+** Note: This part of the README has not yet been updated after the fork. It's probably not really accurate right now. **
 
 |    Property    | Type |          Description          | Working |
 | -------------  | ---- |          -----------          | ------- |
