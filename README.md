@@ -1,5 +1,7 @@
 # react-slick
 
+https://travis-ci.org/jonathanewerner/react-slick.svg?branch=master
+
 The purpose of this fork is to
 - slim down API surface,
 - reduce technical debt / complexity of the original project,
