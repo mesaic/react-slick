@@ -1,9 +1,5 @@
-node_modules
-bower_components
-.sass-cache
-build
-demos/*
-demos1
-TODO.md
-npm-debug.log
-lib
+node_modules/
+.nyc_output/
+coverage/
+*.log
+dist/
