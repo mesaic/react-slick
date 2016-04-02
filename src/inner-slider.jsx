@@ -1,5 +1,3 @@
-'use strict';
-
 import React from 'react';
 import EventHandlersMixin from './mixins/event-handlers';
 import HelpersMixin from './mixins/helpers';
@@ -8,8 +6,6 @@ import defaultProps from './default-props';
 import classnames from 'classnames';
 
 import {Track} from './track';
-import {Dots} from './dots';
-import {PrevArrow, NextArrow} from './arrows';
 
 export var InnerSlider = React.createClass({
   mixins: [HelpersMixin, EventHandlersMixin],
@@ -96,60 +92,22 @@ export var InnerSlider = React.createClass({
       variableWidth: this.props.variableWidth
     };
 
-    var dots;
-
-    if (this.props.dots === true && this.state.slideCount > this.props.slidesToShow) {
-      var dotProps = {
-        dotsClass: this.props.dotsClass,
-        slideCount: this.state.slideCount,
-        slidesToShow: this.props.slidesToShow,
-        currentSlide: this.state.currentSlide,
-        slidesToScroll: this.props.slidesToScroll,
-        clickHandler: this.changeSlide
-      };
-
-      dots = (<Dots {...dotProps} />);
-    }
-
-    var prevArrow, nextArrow;
-
-    var arrowProps = {
-      infinite: this.props.infinite,
-      centerMode: this.props.centerMode,
-      currentSlide: this.state.currentSlide,
-      slideCount: this.state.slideCount,
-      slidesToShow: this.props.slidesToShow,
-      prevArrow: this.props.prevArrow,
-      nextArrow: this.props.nextArrow,
-      clickHandler: this.changeSlide
-    };
-
-    if (this.props.arrows) {
-      prevArrow = (<PrevArrow {...arrowProps} />);
-      nextArrow = (<NextArrow {...arrowProps} />);
-    }
-
-    return (
-      <div className={className} onMouseEnter={this.onInnerSliderEnter} onMouseLeave={this.onInnerSliderLeave}>
-        <div
-          ref='list'
-          className="slick-list"
-          onMouseDown={this.swipeStart}
-          onMouseMove={this.state.dragging ? this.swipeMove: null}
-          onMouseUp={this.swipeEnd}
-          onMouseLeave={this.state.dragging ? this.swipeEnd: null}
-          onTouchStart={this.swipeStart}
-          onTouchMove={this.state.dragging ? this.swipeMove: null}
-          onTouchEnd={this.swipeEnd}
-          onTouchCancel={this.state.dragging ? this.swipeEnd: null}>
-          <Track ref='track' {...trackProps}>
-            {this.props.children}
-          </Track>
-        </div>
-        {prevArrow}
-        {nextArrow}
-        {dots}
+    return <div className={className} onMouseEnter={this.onInnerSliderEnter} onMouseLeave={this.onInnerSliderLeave}>
+      <div
+        ref='list'
+        className="slick-list"
+        onMouseDown={this.swipeStart}
+        onMouseMove={this.state.dragging ? this.swipeMove: null}
+        onMouseUp={this.swipeEnd}
+        onMouseLeave={this.state.dragging ? this.swipeEnd: null}
+        onTouchStart={this.swipeStart}
+        onTouchMove={this.state.dragging ? this.swipeMove: null}
+        onTouchEnd={this.swipeEnd}
+        onTouchCancel={this.state.dragging ? this.swipeEnd: null}>
+        <Track ref='track' {...trackProps}>
+          {this.props.children}
+        </Track>
       </div>
-    );
+    </div>;
   }
 });
