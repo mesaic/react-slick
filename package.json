@@ -9,7 +9,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "babel -d dist src",
-    "lint": "eslint .",
+    "lint": "eslint src",
     "validate": "npm-run-all --parallel lint build",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
@@ -62,7 +62,7 @@
     "slick-carousel": "^1.5.5"
   },
   "peerDependencies": {
-    "react": "^0.13.0 || ^0.14.0"
+    "react": "^0.14.0"
   },
   "babel": {
     "presets": [

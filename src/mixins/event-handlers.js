@@ -1,6 +1,4 @@
-'use strict';
 import {getTrackCSS, getTrackLeft, getTrackAnimateCSS} from './trackHelper';
-import helpers from './helpers';
 import assign from 'object-assign';
 
 /**
@@ -44,24 +42,28 @@ import assign from 'object-assign';
  *
  */
 function shouldTriggerSlideMovement(deltaX, deltaY) {
-  var minimumDegreeOffsetFromHorizontalLine = 20; // degree
-  var xFactor = (minimumDegreeOffsetFromHorizontalLine / 45);
+  const minimumDegreeOffsetFromHorizontalLine = 20; // degree
+  const xFactor = (minimumDegreeOffsetFromHorizontalLine / 45);
   return deltaX * xFactor > deltaY;
 }
 
-var EventHandlers = {
+const EventHandlers = {
   // Event handler for previous and next
-  changeSlide: function (options) {
-    var indexOffset, previousInt, slideOffset, unevenOffset, targetSlide;
-    unevenOffset = (this.state.slideCount % this.props.slidesToScroll !== 0);
-    indexOffset = unevenOffset ? 0 : (this.state.slideCount - this.state.currentSlide) % this.props.slidesToScroll;
+  changeSlide(options) {
+    let previousInt;
+    let targetSlide;
+    let slideOffset;
+    const unevenOffset = (this.state.slideCount % this.props.slidesToScroll !== 0);
+    const indexOffset = unevenOffset
+      ? 0
+      : (this.state.slideCount - this.state.currentSlide) % this.props.slidesToScroll;
 
     if (options.message === 'previous') {
       slideOffset = (indexOffset === 0) ? this.props.slidesToScroll : this.props.slidesToShow - indexOffset;
       targetSlide = this.state.currentSlide - slideOffset;
       if (this.props.lazyLoad) {
         previousInt = this.state.currentSlide - slideOffset;
-        targetSlide = previousInt === -1 ? this.state.slideCount -1 : previousInt;
+        targetSlide = previousInt === -1 ? this.state.slideCount - 1 : previousInt;
       }
     } else if (options.message === 'next') {
       slideOffset = (indexOffset === 0) ? this.props.slidesToScroll : indexOffset;
@@ -81,77 +83,80 @@ var EventHandlers = {
 
     this.slideHandler(targetSlide);
   },
+
   // Accessiblity handler for previous and next
-  keyHandler: function (e) {
+  keyHandler(e) { // eslint-disable-line no-unused-vars
 
   },
   // Focus on selecting a slide (click handler on track)
-  selectHandler: function (e) {
+  selectHandler(e) { // eslint-disable-line no-unused-vars
 
   },
-  swipeStart: function (e) {
-    var touches, posX, posY;
 
+  swipeStart(e) {
     if ((this.props.swipe === false) || ('ontouchend' in document && this.props.swipe === false)) {
       return;
     } else if (this.props.draggable === false && e.type.indexOf('mouse') !== -1) {
       return;
     }
-    posX = (e.touches !== undefined) ? e.touches[0].pageX : e.clientX;
-    posY = (e.touches !== undefined) ? e.touches[0].pageY : e.clientY;
+    const posX = (e.touches !== undefined) ? e.touches[0].pageX : e.clientX;
+    const posY = (e.touches !== undefined) ? e.touches[0].pageY : e.clientY;
     this.setState({
       dragging: true,
       touchObject: {
         startX: posX,
         startY: posY,
         curX: posX,
-        curY: posY
-      }
+        curY: posY,
+      },
     });
   },
-  swipeMove: function (e) {
+
+  swipeMove(e) {
     // Fix #5
     if (this.state.animating) {
       return;
     }
 
-    var swipeLeft;
-    var curLeft, positionOffset;
-    var touchObject = this.state.touchObject;
+    const {touchObject} = this.state;
 
-    curLeft = getTrackLeft(assign({
+    const curLeft = getTrackLeft(assign({
       slideIndex: this.state.currentSlide,
-      trackRef: this.refs.track
+      trackRef: this.refs.track,
     }, this.props, this.state));
+
     touchObject.curX = (e.touches) ? e.touches[0].pageX : e.clientX;
     touchObject.curY = (e.touches) ? e.touches[0].pageY : e.clientY;
     touchObject.swipeLength = Math.round(Math.sqrt(Math.pow(touchObject.curX - touchObject.startX, 2)));
 
-    positionOffset = (this.props.rtl === false ? 1 : -1) * (touchObject.curX > touchObject.startX ? 1 : -1);
+    const positionOffset = (this.props.rtl === false ? 1 : -1) * (touchObject.curX > touchObject.startX ? 1 : -1);
 
-    var currentSlide = this.state.currentSlide;
-    var dotCount = Math.ceil(this.state.slideCount / this.props.slidesToScroll);
-    var swipeDirection = this.swipeDirection(this.state.touchObject);
-    var touchSwipeLength = touchObject.swipeLength;
+    const currentSlide = this.state.currentSlide;
+    const dotCount = Math.ceil(this.state.slideCount / this.props.slidesToScroll);
+    const swipeDirection = this.swipeDirection(this.state.touchObject);
+    let touchSwipeLength = touchObject.swipeLength;
 
     if (this.props.infinite === false) {
-      if ((currentSlide === 0 && swipeDirection === 'right') || (currentSlide + 1 >= dotCount && swipeDirection === 'left')) {
+      if (
+        (currentSlide === 0 && swipeDirection === 'right') ||
+        (currentSlide + 1 >= dotCount && swipeDirection === 'left')
+      ) {
         touchSwipeLength = touchObject.swipeLength * this.props.edgeFriction;
 
         if (this.state.edgeDragged === false && this.props.edgeEvent) {
           this.props.edgeEvent(swipeDirection);
-          this.setState({ edgeDragged: true });
+          this.setState({edgeDragged: true});
         }
       }
     }
 
     if (this.state.swiped === false && this.props.swipeEvent) {
       this.props.swipeEvent(swipeDirection);
-      this.setState({ swiped: true });
+      this.setState({swiped: true});
     }
 
-    var deltaX = Math.abs(touchObject.curX - touchObject.startX);
-    var deltaY = Math.abs(touchObject.curY - touchObject.startY);
+    const deltaX = Math.abs(touchObject.curX - touchObject.startX);
+    const deltaY = Math.abs(touchObject.curY - touchObject.startY);
     if (!shouldTriggerSlideMovement(deltaX, deltaY)) {
       this.setState({
         touchObject: {
@@ -170,11 +175,11 @@ var EventHandlers = {
       return;
     }
 
-    swipeLeft = curLeft + touchSwipeLength * positionOffset;
+    const swipeLeft = curLeft + touchSwipeLength * positionOffset;
     this.setState({
-      touchObject: touchObject,
-      swipeLeft: swipeLeft,
-      trackStyle: getTrackCSS(assign({left: swipeLeft}, this.props, this.state))
+      touchObject,
+      swipeLeft,
+      trackStyle: getTrackCSS(assign({left: swipeLeft}, this.props, this.state)),
     });
 
     // Fix #38
@@ -182,13 +187,14 @@ var EventHandlers = {
       e.preventDefault();
     }
   },
-  swipeEnd: function (e) {
+
+  swipeEnd(e) {
     if (!this.state.dragging) {
       return;
     }
-    var touchObject = this.state.touchObject;
-    var minSwipe = this.state.listWidth/this.props.touchThreshold;
-    var swipeDirection = this.swipeDirection(touchObject);
+    const touchObject = this.state.touchObject;
+    const minSwipe = this.state.listWidth / this.props.touchThreshold;
+    const swipeDirection = this.swipeDirection(touchObject);
 
     // reset the state of touch related state variables.
     this.setState({
@@ -196,12 +202,14 @@ var EventHandlers = {
       edgeDragged: false,
       swiped: false,
       swipeLeft: null,
-      touchObject: {}
+      touchObject: {},
     });
+
     // Fix for #13
     if (!touchObject.swipeLength) {
       return;
     }
+
     if (touchObject.swipeLength > minSwipe) {
       e.preventDefault();
       if (swipeDirection === 'left') {
@@ -213,26 +221,28 @@ var EventHandlers = {
       }
     } else {
       // Adjust the track back to it's original position.
-      var currentLeft = getTrackLeft(assign({
+      const currentLeft = getTrackLeft(assign({
         slideIndex: this.state.currentSlide,
-        trackRef: this.refs.track
+        trackRef: this.refs.track,
       }, this.props, this.state));
 
       this.setState({
-        trackStyle: getTrackAnimateCSS(assign({left: currentLeft}, this.props, this.state))
+        trackStyle: getTrackAnimateCSS(assign({left: currentLeft}, this.props, this.state)),
       });
     }
   },
-  onInnerSliderEnter: function (e) {
+
+  onInnerSliderEnter() {
     if (this.props.autoplay && this.props.pauseOnHover) {
       this.pause();
     }
   },
-  onInnerSliderLeave: function (e) {
+
+  onInnerSliderLeave() {
     if (this.props.autoplay && this.props.pauseOnHover) {
       this.autoPlay();
     }
-  }
+  },
 };
 
 export default EventHandlers;

@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {Component, PropTypes} from 'react';
 import assign from 'object-assign';
 import classnames from 'classnames';
 
-var getSlideClasses = (spec) => {
-  var slickActive, slickCenter, slickCloned;
-  var centerOffset, index;
+const getSlideClasses = (spec) => {
+  let slickActive;
+  let slickCenter;
+  let centerOffset;
+  let index;
 
   if (spec.rtl) {
     index = spec.slideCount - 1 - spec.index;
@@ -12,11 +14,14 @@ var getSlideClasses = (spec) => {
     index = spec.index;
   }
 
-  slickCloned = (index < 0) || (index >= spec.slideCount);
+  const slickCloned = (index < 0) || (index >= spec.slideCount);
   if (spec.centerMode) {
     centerOffset = Math.floor(spec.slidesToShow / 2);
     slickCenter = (index - spec.currentSlide) % spec.slideCount === 0;
-    if ((index > spec.currentSlide - centerOffset - 1) && (index <= spec.currentSlide + centerOffset)) {
+    if (
+      (index > spec.currentSlide - centerOffset - 1) &&
+      (index <= spec.currentSlide + centerOffset)
+    ) {
       slickActive = true;
     }
   } else {
@@ -26,12 +31,12 @@ var getSlideClasses = (spec) => {
     'slick-slide': true,
     'slick-active': slickActive,
     'slick-center': slickCenter,
-    'slick-cloned': slickCloned
+    'slick-cloned': slickCloned,
   });
 };
 
-var getSlideStyle = function (spec) {
-  var style = {};
+const getSlideStyle = (spec) => {
+  const style = {};
 
   if (spec.variableWidth === undefined || spec.variableWidth === false) {
     style.width = spec.slideWidth;
@@ -41,20 +46,21 @@ var getSlideStyle = function (spec) {
     style.position = 'relative';
     style.left = -spec.index * spec.slideWidth;
     style.opacity = (spec.currentSlide === spec.index) ? 1 : 0;
-    style.transition = 'opacity ' + spec.speed + 'ms ' + spec.cssEase;
-    style.WebkitTransition = 'opacity ' + spec.speed + 'ms ' + spec.cssEase;
+    const transition = `opacity ${spec.speed}ms ${spec.cssEase}`;
+    style.transition = transition;
+    style.WebkitTransition = transition;
   }
 
   return style;
 };
 
-var renderSlides = (spec) => {
-  var key;
-  var slides = [];
-  var preCloneSlides = [];
-  var postCloneSlides = [];
-  var count = React.Children.count(spec.children);
-  var child;
+const renderSlides = (spec) => {
+  let key;
+  const slides = [];
+  const preCloneSlides = [];
+  const postCloneSlides = [];
+  const count = React.Children.count(spec.children);
+  let child;
 
   React.Children.forEach(spec.children, (elem, index) => {
     if (!spec.lazyLoad | (spec.lazyLoad && spec.lazyLoadedList.indexOf(index) >= 0)) {
@@ -62,44 +68,44 @@ var renderSlides = (spec) => {
     } else {
       child = (<div></div>);
     }
-    var childStyle = getSlideStyle({...spec, index}));
-    var slickClasses = getSlideClasses(assign({index: index}, spec));
-    var cssClasses;
+    const childStyle = getSlideStyle({...spec, index});
+    const slickClasses = getSlideClasses({...spec, index});
+    let cssClasses;
 
     if (child.props.className) {
-        cssClasses = classnames(slickClasses, child.props.className);
+      cssClasses = classnames(slickClasses, child.props.className);
     } else {
-        cssClasses = slickClasses;
+      cssClasses = slickClasses;
     }
 
     slides.push(React.cloneElement(child, {
       key: index,
       'data-index': index,
       className: cssClasses,
-      style: assign({}, child.props.style || {}, childStyle)
+      style: assign({}, child.props.style || {}, childStyle),
     }));
 
     // variableWidth doesn't wrap properly.
     if (spec.infinite && spec.fade === false) {
-      var infiniteCount = spec.variableWidth ? spec.slidesToShow + 1 : spec.slidesToShow;
+      const infiniteCount = spec.variableWidth ? spec.slidesToShow + 1 : spec.slidesToShow;
 
       if (index >= (count - infiniteCount)) {
         key = -(count - index);
         preCloneSlides.push(React.cloneElement(child, {
-          key: key,
+          key,
           'data-index': key,
           className: cssClasses,
-          style: assign({}, child.props.style || {}, childStyle)
+          style: assign({}, child.props.style || {}, childStyle),
         }));
       }
 
       if (index < infiniteCount) {
         key = count + index;
         postCloneSlides.push(React.cloneElement(child, {
-          key: key,
+          key,
           'data-index': key,
           className: cssClasses,
-          style: assign({}, child.props.style || {}, childStyle)
+          style: assign({}, child.props.style || {}, childStyle),
         }));
       }
     }
@@ -110,17 +116,19 @@ var renderSlides = (spec) => {
   } else {
     return preCloneSlides.concat(slides, postCloneSlides);
   }
-
-
 };
 
-export var Track = React.createClass({
-  render: function () {
-    var slides = renderSlides(this.props);
+export default class Track extends Component {
+  static propTypes = {
+    trackStyle: PropTypes.object,
+  };
+
+  render() {
+    const slides = renderSlides(this.props);
     return (
       <div className='slick-track' style={this.props.trackStyle}>
-        { slides }
+        {slides}
       </div>
     );
   }
-});
+}
