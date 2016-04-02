@@ -66,8 +66,8 @@
   },
   "babel": {
     "presets": [
-      "stage-1",
       "es2015",
+      "stage-1",
       "react"
     ]
   },
