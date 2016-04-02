@@ -1,5 +1,5 @@
 {
-  "name": "@jonathanewerner/react-slick",
+  "name": "@wish.technology/react-slick",
   "description": "Fork of react-slick",
   "main": "./dist",
   "files": [
@@ -9,10 +9,11 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "babel -d dist src",
-    "validate": "npm run build",
+    "lint": "eslint .",
+    "validate": "npm-run-all --parallel lint build",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
-  "author": "Jonathan Werner",
+  "author": "wish.technology",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -33,6 +34,7 @@
   "devDependencies": {
     "babel-cli": "6.6.5",
     "babel-core": "^6.7.4",
+    "babel-eslint": "6.0.2",
     "babel-preset-es2015": "6.6.0",
     "babel-preset-react": "6.5.0",
     "babel-preset-stage-1": "6.5.0",
@@ -40,8 +42,12 @@
     "del": "^2.2.0",
     "es5-shim": "^4.1.7",
     "eslint": "^2.6.0",
-    "eslint-plugin-react": "^4.2.3",
+    "eslint-config-wish-technology": "1.0.0",
+    "eslint-plugin-babel": "3.1.0",
+    "eslint-plugin-flow-vars": "0.2.1",
+    "eslint-plugin-react": "4.2.3",
     "mocha": "^2.2.5",
+    "npm-run-all": "1.7.0",
     "react": "^0.14.6",
     "react-dom": "^0.14.6",
     "rimraf": "2.5.2",
@@ -64,5 +70,8 @@
       "es2015",
       "react"
     ]
+  },
+  "eslintConfig": {
+    "extends": "wish-technology"
   }
 }
