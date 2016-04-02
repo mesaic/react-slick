@@ -1,6 +1,5 @@
 {
   "name": "@jonathanewerner/react-slick",
-  "version": "1.0.0",
   "description": "Fork of react-slick",
   "main": "./dist",
   "files": [
@@ -9,7 +8,8 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "babel -d dist src",
-    "release": "npm run build && with-package git commit -am pkg.version && with-package git tag pkg.version && git push && npm publish --access public && git push --tags"
+    "validate": "npm run build",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "author": "Jonathan Werner",
   "license": "MIT",
@@ -43,7 +43,8 @@
     "mocha": "^2.2.5",
     "react": "^0.14.6",
     "react-dom": "^0.14.6",
-    "with-package": "0.2.0"
+    "with-package": "0.2.0",
+    "semantic-release": "^4.3.5"
   },
   "dependencies": {
     "classnames": "^2.1.1",
