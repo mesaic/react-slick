@@ -21,12 +21,12 @@ It doesn't support bower anymore, arrow / dots elements are not provided.
 
 ### Example
 ```js
-var React = require('react');
-var Slider = require('react-slick');
+const React = require('react');
+const Slider = require('react-slick');
+require('react-slick/slick.css');
 
-var SimpleSlider = React.createClass({
-  render: function () {
-    var settings = {
+const SimpleSlider = () => {
+    const props = {
       dots: true,
       infinite: true,
       speed: 500,
@@ -34,7 +34,7 @@ var SimpleSlider = React.createClass({
       slidesToScroll: 1
     };
     return (
-      <Slider {...settings}>
+      <Slider {...props}>
         <div><h3>1</h3></div>
         <div><h3>2</h3></div>
         <div><h3>3</h3></div>
@@ -44,7 +44,6 @@ var SimpleSlider = React.createClass({
       </Slider>
     );
   }
-});
 ```
 ** Note: This part of the README has not yet been updated after the fork. It's probably not really accurate right now. **
 

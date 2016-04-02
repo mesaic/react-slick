@@ -3,7 +3,8 @@
   "description": "Fork of react-slick",
   "main": "./dist",
   "files": [
-    "dist"
+    "dist",
+    "slick.css"
   ],
   "scripts": {
     "prebuild": "rimraf dist",
@@ -43,8 +44,9 @@
     "mocha": "^2.2.5",
     "react": "^0.14.6",
     "react-dom": "^0.14.6",
-    "with-package": "0.2.0",
-    "semantic-release": "^4.3.5"
+    "rimraf": "2.5.2",
+    "semantic-release": "^4.3.5",
+    "with-package": "0.2.0"
   },
   "dependencies": {
     "classnames": "^2.1.1",
