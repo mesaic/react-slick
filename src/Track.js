@@ -1,5 +1,3 @@
-'use strict';
-
 import React from 'react';
 import assign from 'object-assign';
 import classnames from 'classnames';
@@ -64,7 +62,7 @@ var renderSlides = (spec) => {
     } else {
       child = (<div></div>);
     }
-    var childStyle = getSlideStyle(assign({}, spec, {index: index}));
+    var childStyle = getSlideStyle({...spec, index}));
     var slickClasses = getSlideClasses(assign({index: index}, spec));
     var cssClasses;
 
