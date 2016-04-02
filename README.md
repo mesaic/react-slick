@@ -1,40 +1,9 @@
 # react-slick
 
-[![Join the chat at https://gitter.im/akiran/react-slick](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/akiran/react-slick?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-
-Carousel component built with React. It is a react port of [slick carousel](http://kenwheeler.github.io/slick/)
-
-# Road to 1.0
-react-slick is under active development now.
-Soon this project will have all the features of slick carousel.
-We encourage your feedback and support.
-
 ### Installation
 ```bash
   npm install react-slick
 ```
-Also install slick-carousel for css and font
-```bash
-  bower install slick-carousel
-```
-or add cdn link in your html
-```
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.3.15/slick.css" />
-```
-
-### [Demos](http://webrafter.com/opensource/react-slick)
-
-### [PlayGround](https://jsfiddle.net/kirana/20bumb4g/)
-Use [jsfiddle template](https://jsfiddle.net/kirana/20bumb4g/) to try react-slick with different settings.
-
-### Filling issues
-Please replicate your issue with [jsfiddile template](https://jsfiddle.net/kirana/20bumb4g/) and post it along with issue to make it easy for me to debug.
-
-
-### Starter Kit
-Checkout [yeoman generator](https://github.com/akiran/generator-react-slick) to quickly
-get started with react-slick.
 
 ### Example
 ```js
@@ -101,38 +70,3 @@ var SimpleSlider = React.createClass({
 | afterChange | function | callback function called after the current index changes | Yes |
 | beforeChange | function | callback function called before the current index changes | Yes |
 | slickGoTo | int | go to the specified slide number
-
-### Custom next/prev arrows
-
-To customize the next/prev arrow elements, simply create new React components and set them
-as the values of nextArrow and prevArrow.
-
-````
-class LeftNavButton extends React.Component {
-  render() {
-    return <button {...this.props}>Next</button>  
-  }
-}
-
-````
-
-Important: be sure that you pass your component's props to your clickable element
-like the example above. If you don't, your custom component won't trigger the click handler.
-
-You can also set onClick={this.props.onClick} if you only want to set the click handler. 
-
-
-### Development
-Want to run demos locally
-```
-git clone https://github.com/akiran/react-slick
-npm install
-npm start
-open http://localhost:8000
-```
-
-### Polyfills for old IE support
-`matchMedia` support from [media-match](https://github.com/weblinc/media-match)
-
-For premium support, contact me on codementor
-[![Contact me on Codementor](https://cdn.codementor.io/badges/contact_me_github.svg)](https://www.codementor.io/akiran?utm_source=github&utm_medium=button&utm_term=akiran&utm_campaign=github)
