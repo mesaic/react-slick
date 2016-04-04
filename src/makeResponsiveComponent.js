@@ -35,7 +35,7 @@ export default function makeResponsiveComponent(component, {defaultProps} = {}) 
             : {minWidth: breakpoints[index - 1], maxWidth: breakpoint};
 
           this._registerMediaQueryHandler(json2mq(mediaQuery), () => {
-            this.setState({breakpoint});
+            this.setState && this.setState({breakpoint});
           });
         });
 
@@ -43,7 +43,7 @@ export default function makeResponsiveComponent(component, {defaultProps} = {}) 
         const query = json2mq({minWidth: breakpoints.slice(-1)[0]});
 
         this._registerMediaQueryHandler(query, () => {
-          this.setState({breakpoint: null});
+          this.setState && this.setState({breakpoint: null});
         });
       }
     }
