@@ -1,15 +1,11 @@
 export default {
   className: '',
-  // accessibility: true,
   adaptiveHeight: false,
-  arrows: true,
   autoplay: false,
   autoplaySpeed: 3000,
   centerMode: false,
   centerPadding: '50px',
   cssEase: 'ease',
-  dots: false,
-  dotsClass: 'slick-dots',
   draggable: true,
   easing: 'linear',
   edgeFriction: 0.35,
@@ -38,7 +34,4 @@ export default {
   edgeEvent: null,
   init: null,
   swipeEvent: null,
-  // nextArrow, prevArrow are react componets
-  nextArrow: null,
-  prevArrow: null,
 };

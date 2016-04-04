@@ -1,72 +1,140 @@
 import React, {PropTypes} from 'react';
-import assign from 'object-assign';
-import json2mq from 'json2mq';
-import ResponsiveMixin from 'react-responsive-mixin';
+import classnames from 'classnames';
 
+import EventHandlersMixin from './mixins/event-handlers';
+import HelpersMixin from './mixins/helpers';
+import initialState from './initialState';
 import defaultProps from './defaultProps';
-import InnerSlider from './InnerSlider';
+import Track from './Track';
+import makeResponsiveComponent from './makeResponsiveComponent';
 
-const Slider = React.createClass({ // eslint-disable-line react/prefer-es6-class
-  mixins: [ResponsiveMixin], // eslint-disable-line react/sort-comp
+export const Slider = React.createClass({ // eslint-disable-line react/prefer-es6-class
+  mixins: [HelpersMixin, EventHandlersMixin], // eslint-disable-line react/sort-comp
+
   propTypes: {
-    responsive: PropTypes.any,
     children: PropTypes.node,
+    className: PropTypes.string,
+    init: PropTypes.func,
+    slidesToShow: PropTypes.number,
+    lazyLoad: PropTypes.bool,
+    variableWidth: PropTypes.bool,
+    rtl: PropTypes.bool,
+    fade: PropTypes.any,
+    cssEase: PropTypes.any,
+    speed: PropTypes.any,
+    infinite: PropTypes.any,
+    centerMode: PropTypes.any,
+    slickGoTo: PropTypes.number,
+    responsive: PropTypes.any,
   },
+
   getInitialState() {
-    return {
-      breakpoint: null,
-    };
+    return initialState;
+  },
+
+  getDefaultProps() {
+    return defaultProps;
+  },
+
+  componentWillMount() {
+    if (this.props.init) {
+      this.props.init();
+    }
+    this.setState({
+      mounted: true,
+    });
+    const lazyLoadedList = [];
+    for (let i = 0; i < React.Children.count(this.props.children); i++) {
+      if (i >= this.state.currentSlide && i < this.state.currentSlide + this.props.slidesToShow) {
+        lazyLoadedList.push(i);
+      }
+    }
+
+    if (this.props.lazyLoad && this.state.lazyLoadedList.length === 0) {
+      this.setState({lazyLoadedList});
+    }
   },
   componentDidMount() {
-    if (this.props.responsive) {
-      const breakpoints = this.props.responsive.map((breakpoint) => (breakpoint.breakpoint));
-      breakpoints.sort((x, y) => x - y);
+    this.initialize(this.props);
+    this.adaptHeight();
+    if (window.addEventListener) {
+      window.addEventListener('resize', this._handleWindowResize);
+    } else {
+      window.attachEvent('onresize', this._handleWindowResize);
+    }
+  },
 
-      breakpoints.forEach((breakpoint, index) => {
-        let bQuery;
-        if (index === 0) {
-          bQuery = json2mq({minWidth: 0, maxWidth: breakpoint});
-        } else {
-          bQuery = json2mq({minWidth: breakpoints[index - 1], maxWidth: breakpoint});
-        }
-        this.media(bQuery, () => {
-          this.setState({breakpoint});
-        });
+  componentWillReceiveProps(nextProps) {
+    if (this.props.slickGoTo !== nextProps.slickGoTo) {
+      this.changeSlide({
+        message: 'index',
+        index: nextProps.slickGoTo,
+        currentSlide: this.state.currentSlide,
       });
+    } else {
+      this.update(nextProps);
+    }
+  },
 
-      // Register media query for full screen. Need to support resize from small to large
-      const query = json2mq({minWidth: breakpoints.slice(-1)[0]});
+  componentDidUpdate() {
+    this.adaptHeight();
+  },
 
-      this.media(query, () => {
-        this.setState({breakpoint: null});
-      });
+  componentWillUnmount() {
+    if (window.addEventListener) {
+      window.removeEventListener('resize', this._handleWindowResize);
+    } else {
+      window.detachEvent('onresize', this._handleWindowResize);
+    }
+    if (this.state.autoPlayTimer) {
+      window.clearInterval(this.state.autoPlayTimer);
     }
   },
 
   render() {
-    let settings;
-    let newProps;
-    if (this.state.breakpoint) {
-      newProps = this.props.responsive.filter((resp) => resp.breakpoint === this.state.breakpoint);
-      settings = newProps[0].settings === 'unslick'
-        ? 'unslick'
-        : assign({}, this.props, newProps[0].settings);
-    } else {
-      settings = assign({}, defaultProps, this.props);
-    }
-    if (settings === 'unslick') {
-      // if 'unslick' responsive breakpoint setting used, just return the <Slider> tag nested HTML
-      return (
-        <div>{this.props.children}</div>
-      );
-    } else {
-      return (
-        <InnerSlider {...settings}>
+    const className = classnames('slick-initialized', 'slick-slider', this.props.className);
+
+    const trackProps = {
+      fade: this.props.fade,
+      cssEase: this.props.cssEase,
+      speed: this.props.speed,
+      infinite: this.props.infinite,
+      centerMode: this.props.centerMode,
+      currentSlide: this.state.currentSlide,
+      lazyLoad: this.props.lazyLoad,
+      lazyLoadedList: this.state.lazyLoadedList,
+      rtl: this.props.rtl,
+      slideWidth: this.state.slideWidth,
+      slidesToShow: this.props.slidesToShow,
+      slideCount: this.state.slideCount,
+      trackStyle: this.state.trackStyle,
+      variableWidth: this.props.variableWidth,
+    };
+    return <div
+      className={className}
+      onMouseEnter={this.onInnerSliderEnter}
+      onMouseLeave={this.onInnerSliderLeave}>
+      <div
+        ref='list'
+        className='slick-list'
+        onMouseDown={this.swipeStart}
+        onMouseMove={this.state.dragging ? this.swipeMove : null}
+        onMouseUp={this.swipeEnd}
+        onMouseLeave={this.state.dragging ? this.swipeEnd : null}
+        onTouchStart={this.swipeStart}
+        onTouchMove={this.state.dragging ? this.swipeMove : null}
+        onTouchEnd={this.swipeEnd}
+        onTouchCancel={this.state.dragging ? this.swipeEnd : null}>
+        <Track ref='track' {...trackProps}>
           {this.props.children}
-        </InnerSlider>
-      );
-    }
+        </Track>
+      </div>
+    </div>;
+  },
+
+  _handleWindowResize() {
+    this.update(this.props);
   },
 });
 
-export default Slider;
+export default makeResponsiveComponent(Slider, {defaultProps});

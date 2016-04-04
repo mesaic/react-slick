@@ -1,16 +1,6 @@
 import ReactDOM from 'react-dom';
 
-const checkSpecKeys = (spec, keysArray) => {
-  return keysArray.reduce((value, key) => {
-    return value && spec.hasOwnProperty(key);
-  }, true) ? null : console.error('Keys Missing', spec);
-};
-
 export const getTrackCSS = (spec) => {
-  checkSpecKeys(spec, [
-    'left', 'variableWidth', 'slideCount', 'slidesToShow', 'slideWidth',
-  ]);
-
   let trackWidth;
 
   if (spec.variableWidth) {
@@ -41,10 +31,6 @@ export const getTrackCSS = (spec) => {
 };
 
 export const getTrackAnimateCSS = (spec) => {
-  checkSpecKeys(spec, [
-    'left', 'variableWidth', 'slideCount', 'slidesToShow', 'slideWidth', 'speed', 'cssEase',
-  ]);
-
   const style = getTrackCSS(spec);
   // useCSS is true by default so it can be undefined
   style.WebkitTransition = `-webkit-transform ${spec.speed}ms ${spec.cssEase}`;
@@ -53,10 +39,6 @@ export const getTrackAnimateCSS = (spec) => {
 };
 
 export const getTrackLeft = (spec) => {
-  checkSpecKeys(spec, [
-    'slideIndex', 'trackRef', 'infinite', 'centerMode', 'slideCount', 'slidesToShow',
-    'slidesToScroll', 'slideWidth', 'listWidth', 'variableWidth']);
-
   let slideOffset = 0;
   let targetLeft;
   let targetSlide;
