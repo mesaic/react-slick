@@ -110,6 +110,7 @@ export const Slider = React.createClass({ // eslint-disable-line react/prefer-es
       trackStyle: this.state.trackStyle,
       variableWidth: this.props.variableWidth,
     };
+
     return <div
       className={className}
       onMouseEnter={this.onInnerSliderEnter}
