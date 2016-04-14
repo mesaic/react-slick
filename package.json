@@ -48,7 +48,7 @@
     "enzyme": "2.2.0",
     "es5-shim": "^4.1.7",
     "eslint": "^2.6.0",
-    "eslint-config-wish-technology": "2.1.0",
+    "eslint-config-wish-technology": "2.2.0",
     "eslint-plugin-babel": "3.2.0",
     "eslint-plugin-flow-vars": "0.3.0",
     "eslint-plugin-react": "4.3.0",
