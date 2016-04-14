@@ -1,8 +1,6 @@
 # react-slick
 
 [![Build Status](https://img.shields.io/travis/wish-technology/react-slick.svg?style=flat-square)](https://travis-ci.org/wish-technology/react-slick)
-![dependencies](https://img.shields.io/david/wish-technology/react-slick.svg?style=flat-square)
-![devDependencies](https://img.shields.io/david/dev/wish-technology/react-slick.svg?style=flat-square)
 
 [![version](https://img.shields.io/npm/v/@wish.technology/react-slick.svg?style=flat-square)](http://npm.im/@wish.technology/react-slick)
 [![downloads](https://img.shields.io/npm/dm/@wish.technology/react-slick.svg?style=flat-square)](http://npm-stat.com/charts.html?package=@wish.technology/react-slick&from=2015-08-01)
