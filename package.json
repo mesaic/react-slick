@@ -1,5 +1,5 @@
 {
-  "name": "@wish.technology/react-slick",
+  "name": "@mesaic/react-slick",
   "description": "Fork of react-slick",
   "main": "./dist",
   "files": [
@@ -19,12 +19,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/wish-technology/react-slick"
+    "url": "https://github.com/mesaic/react-slick"
   },
   "bugs": {
-    "url": "https://github.com/wish-technology/react-slick/issues"
+    "url": "https://github.com/mesaic/react-slick/issues"
   },
-  "homepage": "https://github.com/wish-technology/react-slick",
+  "homepage": "https://github.com/mesaic/react-slick",
   "keywords": [
     "slick",
     "carousel",
